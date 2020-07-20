@@ -78,8 +78,8 @@ class OpdsBooksModel(QAbstractTableModel):
             )
             return (None, {})
         self.serverHeader = feed.headers["server"]
-        print "serverHeader: %s" % self.serverHeader
-        print "feed.entries: %s" % feed.entries
+        print("serverHeader: %s" % self.serverHeader)
+        print("feed.entries: %s" % feed.entries)
         catalogEntries = {}
         firstTitle = None
         for entry in feed.entries:
@@ -89,12 +89,12 @@ class OpdsBooksModel(QAbstractTableModel):
             links = entry.get("links", [])
             firstLink = next(iter(links), None)
             if firstLink is not None:
-                print "firstLink: %s" % firstLink
+                print("firstLink: %s" % firstLink)
                 catalogEntries[title] = firstLink.href
         return (firstTitle, catalogEntries)
 
     def downloadOpdsCatalog(self, gui, opdsCatalogUrl):
-        print "downloading catalog: %s" % opdsCatalogUrl
+        print("downloading catalog: %s" % opdsCatalogUrl)
         opdsCatalogFeed = feedparser.parse(opdsCatalogUrl)
         self.books = self.makeMetadataFromParsedOpds(opdsCatalogFeed.entries)
         self.filterBooks()

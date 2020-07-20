@@ -85,7 +85,7 @@ class OpdsDialog(QDialog):
         catalogsTuple = self.model.downloadOpdsRootCatalog(
             self.gui, self.opdsUrlEditor.currentText(), False
         )
-        print catalogsTuple
+        print(catalogsTuple)
         firstCatalogTitle = catalogsTuple[0]
         self.currentOpdsCatalogs = catalogsTuple[1]  # A dictionary of title->feedURL
 
@@ -198,7 +198,7 @@ class OpdsDialog(QDialog):
 
     def searchBookList(self):
         searchString = self.searchEditor.text()
-        print "starting book list search for: %s" % searchString
+        print("starting book list search for: %s" % searchString)
         self.searchproxymodel.setFilterFixedString(searchString)
 
     def about(self):
@@ -249,7 +249,7 @@ class OpdsDialog(QDialog):
         for identicalBookId in identicalBookIds:
             bookIdToValMap[identicalBookId] = bookTimestamp
         if len(bookIdToValMap) < 1:
-            print "Failed to set timestamp of book: %s" % book
+            print("Failed to set timestamp of book: %s" % book)
         self.db.set_field("timestamp", bookIdToValMap)
 
     def findIdenticalBooksForBooksWithMultipleAuthors(self, book):
