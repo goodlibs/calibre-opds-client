@@ -16,41 +16,27 @@ The **Calibre OPDS Client** is a Calibre plugin that reads from an OPDS server a
 
 ## :hammer_and_wrench: Installation
 
-Requires git and calibre installed:
+1. Ensure Calibre is installed on your machine and the [command line tools](https://manual.calibre-ebook.com/generated/en/cli-index.html) are available in your search path.
 
-  - Clone the repository:
-    
-    ``` example
-    git clone https://github.com/steinarb/opds-reader.git
-    ```
-
-  - Install the plugin in calibre
-    
-    ``` example
-    cd opds-reader/calibre_plugin/
+1. Install the plugin.
+    ```bash
+    cd calibre-opds-client/calibre_plugin/
     calibre-customize -b .
     ```
 
-  - Start calibre (if calibre was already running, stop calibre and
-    start it again)
+1. Restart Calibre.
 
-  - Click the button "Preferences"
-
-  - In the dialog "calibre - Preferences":
-    
-      - Under "Interface", click on the button "Toolbar"
-      - In the dialog "calibre - Preferences - Toolbar":
-          - In the dropdown, select "The main toolbar"
-          - In "Available actions" scroll down to find "OPDS Client" and
-            select it
-          - Click the top arrow button (arrow pointing right)
-          - Click the "Apply" button
-      - Click the "Close" button
+1. Add the plugin to the main toolbar.
+    1. Open the Preferences menu.
+    1. Under the `Interface` section, click on the button labeled `Toolbars & menus`.
+    1. Click the dropdown menu and select `The main toolbar`.
+    1. Select `OPDS Client` under `Available actions` on the left side.
+    1. Click the right arrow (`>`) to add it to the main toolbar.
+    1. Click `Apply`, then `Close` the Preferences menu.
 
 ## :computer: Usage
 
-I made this tool to backup my book collection between two PCs in my home
-LAN, and that is the procedure I will document here:
+## Back up book collection between two computers on a LAN
 
 1.  In the calibre you wish to copy from (in this example called
     calibre1.home.lan):
