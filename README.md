@@ -99,7 +99,7 @@ https://standardebooks.org/opds
             time. To fix the time stamp, click on the "Fix timestamps of
             the selection" button
             
-              - The updated timestamps may not show up immediatly, but
+              - The updated timestamps may not show up immediately, but
                 they will show up after the first update of the display,
                 and the books will be ordered according to the timestamp
                 after stopping and starting calibre
