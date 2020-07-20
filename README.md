@@ -16,7 +16,7 @@ The **Calibre OPDS Client** is a Calibre plugin that reads from an OPDS server a
 
 ## :hammer_and_wrench: Installation
 
-1. Ensure Calibre is installed on your machine and the [command line tools](https://manual.calibre-ebook.com/generated/en/cli-index.html) are available in your search path.
+1. Ensure [Calibre](https://calibre-ebook.com/download) is installed on your machine and the [command line tools](https://manual.calibre-ebook.com/generated/en/cli-index.html) are available in your search path.
 
 1. Install the plugin.
     ```bash
