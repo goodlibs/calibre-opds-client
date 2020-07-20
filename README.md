@@ -36,7 +36,7 @@ The **Calibre OPDS Client** is a Calibre plugin that reads from an OPDS server a
 
 ## :computer: Usage
 
-## Back up book collection between two computers on a LAN
+### Back up book collection between two computers on a LAN
 
 1.  In the calibre you wish to copy from (in this example called
     calibre1.home.lan):
