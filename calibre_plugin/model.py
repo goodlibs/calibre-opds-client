@@ -1,9 +1,9 @@
 """model.py: This is a QAbstractTableModel that holds a list of Metadata objects created from books in an OPDS feed"""
 
-__author__    = "Steinar Bang"
+__author__ = "Steinar Bang"
 __copyright__ = "Steinar Bang, 2015"
-__credits__   = ["Steinar Bang"]
-__license__   = "GPL v3"
+__credits__ = ["Steinar Bang"]
+__license__ = "GPL v3"
 
 import datetime
 from PyQt5.Qt import Qt, QAbstractTableModel, QCoreApplication
@@ -17,12 +17,12 @@ import re
 
 
 class OpdsBooksModel(QAbstractTableModel):
-    column_headers = [_('Title'), _('Author(s)'), _('Updated')]
+    column_headers = [_("Title"), _("Author(s)"), _("Updated")]
     booktableColumnCount = 3
     filterBooksThatAreNewspapers = False
     filterBooksThatAreAlreadyInLibrary = False
 
-    def __init__(self, parent, books = [], db = None):
+    def __init__(self, parent, books=[], db=None):
         QAbstractTableModel.__init__(self, parent)
         self.db = db
         self.books = self.makeMetadataFromParsedOpds(books)
@@ -58,7 +58,7 @@ class OpdsBooksModel(QAbstractTableModel):
         if col == 0:
             return opdsBook.title
         if col == 1:
-            return u' & '.join(opdsBook.author)
+            return u" & ".join(opdsBook.author)
         if col == 2:
             if opdsBook.timestamp is not None:
                 return opdsBook.timestamp.strftime("%Y-%m-%d %H:%M:%S")
@@ -67,24 +67,26 @@ class OpdsBooksModel(QAbstractTableModel):
 
     def downloadOpdsRootCatalog(self, gui, opdsUrl, displayDialogOnErrors):
         feed = feedparser.parse(opdsUrl)
-        if 'bozo_exception' in feed:
-            exception = feed['bozo_exception']
-            message = 'Failed opening the OPDS URL ' + opdsUrl + ': '
-            reason = ''
-            if hasattr(exception, 'reason') :
+        if "bozo_exception" in feed:
+            exception = feed["bozo_exception"]
+            message = "Failed opening the OPDS URL " + opdsUrl + ": "
+            reason = ""
+            if hasattr(exception, "reason"):
                 reason = str(exception.reason)
-            error_dialog(gui, _('Failed opening the OPDS URL'), message, reason, displayDialogOnErrors)
+            error_dialog(
+                gui, _("Failed opening the OPDS URL"), message, reason, displayDialogOnErrors
+            )
             return (None, {})
-        self.serverHeader = feed.headers['server']
+        self.serverHeader = feed.headers["server"]
         print "serverHeader: %s" % self.serverHeader
         print "feed.entries: %s" % feed.entries
         catalogEntries = {}
         firstTitle = None
         for entry in feed.entries:
-            title = entry.get('title', 'No title')
+            title = entry.get("title", "No title")
             if firstTitle is None:
                 firstTitle = title
-            links = entry.get('links', [])
+            links = entry.get("links", [])
             firstLink = next(iter(links), None)
             if firstLink is not None:
                 print "firstLink: %s" % firstLink
@@ -106,7 +108,7 @@ class OpdsBooksModel(QAbstractTableModel):
             nextUrl = self.findNextUrl(nextFeed.feed)
 
     def isCalibreOpdsServer(self):
-        return self.serverHeader.startswith('calibre')
+        return self.serverHeader.startswith("calibre")
 
     def setFilterBooksThatAreAlreadyInLibrary(self, value):
         if value != self.filterBooksThatAreAlreadyInLibrary:
@@ -128,7 +130,7 @@ class OpdsBooksModel(QAbstractTableModel):
 
     def isFilteredNews(self, book):
         if self.filterBooksThatAreNewspapers:
-            if u'News' in book.tags:
+            if u"News" in book.tags:
                 return True
         return False
 
@@ -145,30 +147,30 @@ class OpdsBooksModel(QAbstractTableModel):
         return metadatalist
 
     def opdsToMetadata(self, opdsBookStructure):
-        authors = opdsBookStructure.author.replace(u'& ', u'&')
-        metadata = Metadata(opdsBookStructure.title, authors.split(u'&'))
-        metadata.uuid = opdsBookStructure.id.replace('urn:uuid:', '', 1)
+        authors = opdsBookStructure.author.replace(u"& ", u"&")
+        metadata = Metadata(opdsBookStructure.title, authors.split(u"&"))
+        metadata.uuid = opdsBookStructure.id.replace("urn:uuid:", "", 1)
         rawTimestamp = opdsBookStructure.updated
-        parsableTimestamp = re.sub('((\.[0-9]+)?\+00:00|Z)$', '', rawTimestamp)
-        metadata.timestamp = datetime.datetime.strptime(parsableTimestamp, '%Y-%m-%dT%H:%M:%S')
+        parsableTimestamp = re.sub("((\.[0-9]+)?\+00:00|Z)$", "", rawTimestamp)
+        metadata.timestamp = datetime.datetime.strptime(parsableTimestamp, "%Y-%m-%dT%H:%M:%S")
         tags = []
-        summary = opdsBookStructure.get(u'summary', u'')
+        summary = opdsBookStructure.get(u"summary", u"")
         summarylines = summary.splitlines()
         for summaryline in summarylines:
-            if summaryline.startswith(u'TAGS: '):
-                tagsline = summaryline.replace(u'TAGS: ', u'')
-                tagsline = tagsline.replace(u'<br />',u'')
-                tagsline = tagsline.replace(u', ', u',')
-                tags = tagsline.split(u',')
+            if summaryline.startswith(u"TAGS: "):
+                tagsline = summaryline.replace(u"TAGS: ", u"")
+                tagsline = tagsline.replace(u"<br />", u"")
+                tagsline = tagsline.replace(u", ", u",")
+                tags = tagsline.split(u",")
         metadata.tags = tags
         bookDownloadUrls = []
-        links = opdsBookStructure.get('links', [])
+        links = opdsBookStructure.get("links", [])
         for link in links:
-            url = link.get('href', '')
-            bookType = link.get('type', '')
+            url = link.get("href", "")
+            bookType = link.get("type", "")
             # Skip covers and thumbnails
-            if not bookType.startswith('image/'):
-                if bookType == 'application/x-mobipocket-ebook':
+            if not bookType.startswith("image/"):
+                if bookType == "application/x-mobipocket-ebook":
                     # azw3 books are preferred and always put at the head of the list if found
                     bookDownloadUrls.insert(0, url)
                 else:
@@ -179,7 +181,7 @@ class OpdsBooksModel(QAbstractTableModel):
 
     def findNextUrl(self, feed):
         for link in feed.links:
-            if link.rel == u'next':
+            if link.rel == u"next":
                 return link.href
         return None
 
@@ -199,20 +201,26 @@ class OpdsBooksModel(QAbstractTableModel):
         # GET the search URL twice: the first time is to get the total number
         # of books in the other calibre.  The second GET gets arguments
         # to retrieve all book ids in the other calibre.
-        parsedCalibreRestSearchUrl = urlparse.ParseResult(parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, '/ajax/search', '', '', '')
+        parsedCalibreRestSearchUrl = urlparse.ParseResult(
+            parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, "/ajax/search", "", "", ""
+        )
         calibreRestSearchUrl = parsedCalibreRestSearchUrl.geturl()
         calibreRestSearchResponse = urllib2.urlopen(calibreRestSearchUrl)
         calibreRestSearchJsonResponse = json.load(calibreRestSearchResponse)
-        getAllIdsArgument = 'num=' + str(calibreRestSearchJsonResponse['total_num']) + '&offset=0'
-        parsedCalibreRestSearchUrl = urlparse.ParseResult(parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, '/ajax/search', '', getAllIdsArgument, '').geturl()
+        getAllIdsArgument = "num=" + str(calibreRestSearchJsonResponse["total_num"]) + "&offset=0"
+        parsedCalibreRestSearchUrl = urlparse.ParseResult(
+            parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, "/ajax/search", "", getAllIdsArgument, ""
+        ).geturl()
         calibreRestSearchResponse = urllib2.urlopen(parsedCalibreRestSearchUrl)
         calibreRestSearchJsonResponse = json.load(calibreRestSearchResponse)
-        bookIds = map(str, calibreRestSearchJsonResponse['book_ids'])
+        bookIds = map(str, calibreRestSearchJsonResponse["book_ids"])
 
         # Get the metadata for all books by adding the list of
         # all IDs as a GET argument
-        bookIdsGetArgument = 'ids=' + ','.join(bookIds)
-        parsedCalibreRestBooksUrl = urlparse.ParseResult(parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, '/ajax/books', '', bookIdsGetArgument, '')
+        bookIdsGetArgument = "ids=" + ",".join(bookIds)
+        parsedCalibreRestBooksUrl = urlparse.ParseResult(
+            parsedOpdsUrl.scheme, parsedOpdsUrl.netloc, "/ajax/books", "", bookIdsGetArgument, ""
+        )
         calibreRestBooksResponse = urllib2.urlopen(parsedCalibreRestBooksUrl.geturl())
         booksDictionary = json.load(calibreRestBooksResponse)
         self.updateTimestampInMetadata(bookIds, booksDictionary)
@@ -221,12 +229,12 @@ class OpdsBooksModel(QAbstractTableModel):
         bookMetadataById = {}
         for bookId in bookIds:
             bookMetadata = booksDictionary[bookId]
-            uuid = bookMetadata['uuid']
+            uuid = bookMetadata["uuid"]
             bookMetadataById[uuid] = bookMetadata
         for book in self.books:
             bookMetadata = bookMetadataById[book.uuid]
-            rawTimestamp = bookMetadata['timestamp']
-            parsableTimestamp = re.sub('(\.[0-9]+)?\+00:00$', '', rawTimestamp)
-            timestamp = datetime.datetime.strptime(parsableTimestamp, '%Y-%m-%dT%H:%M:%S')
+            rawTimestamp = bookMetadata["timestamp"]
+            parsableTimestamp = re.sub("(\.[0-9]+)?\+00:00$", "", rawTimestamp)
+            timestamp = datetime.datetime.strptime(parsableTimestamp, "%Y-%m-%dT%H:%M:%S")
             book.timestamp = timestamp
         self.filterBooks()

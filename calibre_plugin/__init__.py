@@ -1,32 +1,35 @@
 """main.py: A calibre plugin containing an OPDS client"""
 
-__author__    = "Steinar Bang"
+__author__ = "Steinar Bang"
 __copyright__ = "Steinar Bang, 2015"
-__credits__   = ["Steinar Bang"]
-__license__   = "GPL v3"
+__credits__ = ["Steinar Bang"]
+__license__ = "GPL v3"
 
 from calibre.customize import InterfaceActionBase
 
+
 class OpdsClient(InterfaceActionBase):
-    '''
+    """
     An OPDS client that can read the OPDS of a different calibre,
     and display the differences between this calibre and the other
     and download the missing books from the other calibre
-    '''
-    name = 'OPDS Client'
-    description = 'Import from the OPDS catalog exported by a different calibre'
-    supported_platforms = ['windows', 'osx', 'linux']
+    """
+
+    name = "OPDS Client"
+    description = "Import from the OPDS catalog exported by a different calibre"
+    supported_platforms = ["windows", "osx", "linux"]
     author = "Steinar Bang"
     version = (1, 0, 0)
     minimum_calibre_version = (2, 35, 0)
 
-    actual_plugin = 'calibre_plugins.opds_client.ui:OpdsInterfacePlugin'
+    actual_plugin = "calibre_plugins.opds_client.ui:OpdsInterfacePlugin"
 
     def is_customizable(self):
         return True
 
     def config_widget(self):
         from calibre_plugins.opds_client.config import ConfigWidget
+
         return ConfigWidget()
 
     def save_settings(self, config_widget):
