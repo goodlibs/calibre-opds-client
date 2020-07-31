@@ -6,6 +6,7 @@ __credits__ = ["Steinar Bang"]
 __license__ = "GPL v3"
 
 from calibre.gui2.actions import InterfaceAction
+
 from calibre_plugins.opds_client.main import OpdsDialog
 
 

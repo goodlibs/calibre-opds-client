@@ -6,14 +6,16 @@ __credits__ = ["Steinar Bang"]
 __license__ = "GPL v3"
 
 import datetime
-from PyQt5.Qt import Qt, QAbstractTableModel, QCoreApplication
+import json
+import re
+import urllib2
+import urlparse
+
+from PyQt5.Qt import QAbstractTableModel, QCoreApplication, Qt
+
 from calibre.ebooks.metadata.book.base import Metadata
 from calibre.gui2 import error_dialog
 from calibre.web.feeds import feedparser
-import urlparse
-import urllib2
-import json
-import re
 
 
 class OpdsBooksModel(QAbstractTableModel):
@@ -151,7 +153,7 @@ class OpdsBooksModel(QAbstractTableModel):
         metadata = Metadata(opdsBookStructure.title, authors.split(u"&"))
         metadata.uuid = opdsBookStructure.id.replace("urn:uuid:", "", 1)
         rawTimestamp = opdsBookStructure.updated
-        parsableTimestamp = re.sub("((\.[0-9]+)?\+00:00|Z)$", "", rawTimestamp)
+        parsableTimestamp = re.sub(r"((\.[0-9]+)?\+00:00|Z)$", "", rawTimestamp)
         metadata.timestamp = datetime.datetime.strptime(parsableTimestamp, "%Y-%m-%dT%H:%M:%S")
         tags = []
         summary = opdsBookStructure.get(u"summary", u"")
@@ -234,7 +236,7 @@ class OpdsBooksModel(QAbstractTableModel):
         for book in self.books:
             bookMetadata = bookMetadataById[book.uuid]
             rawTimestamp = bookMetadata["timestamp"]
-            parsableTimestamp = re.sub("(\.[0-9]+)?\+00:00$", "", rawTimestamp)
+            parsableTimestamp = re.sub(r"(\.[0-9]+)?\+00:00$", "", rawTimestamp)
             timestamp = datetime.datetime.strptime(parsableTimestamp, "%Y-%m-%dT%H:%M:%S")
             book.timestamp = timestamp
         self.filterBooks()

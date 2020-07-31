@@ -5,7 +5,7 @@ __copyright__ = "Steinar Bang, 2015"
 __credits__ = ["Steinar Bang"]
 __license__ = "GPL v3"
 
-from PyQt5.Qt import QWidget, QGridLayout, QLabel, QComboBox, QCheckBox
+from PyQt5.Qt import QCheckBox, QComboBox, QGridLayout, QLabel, QWidget
 
 from calibre.utils.config import JSONConfig
 
@@ -72,7 +72,7 @@ def saveOpdsUrlCombobox(opdsUrlEditor):
 
 
 def convertSingleStringOpdsUrlPreferenceToListOfStringsPreference():
-    if type(prefs["opds_url"]) != type(prefs.defaults["opds_url"]):
+    if type(prefs["opds_url"]) != type(prefs.defaults["opds_url"]):  # noqa: E721
         # Upgrade config option from single string to list of strings
         originalUrl = prefs["opds_url"]
         prefs["opds_url"] = prefs.defaults["opds_url"]
