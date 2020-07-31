@@ -20,7 +20,7 @@ The **Calibre OPDS Client** is a Calibre plugin that reads from an OPDS server a
 
 1. Install the plugin.
     ```bash
-    cd calibre-opds-client/calibre_plugin/
+    cd calibre_plugin
     calibre-customize -b .
     ```
 
