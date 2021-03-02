@@ -8,8 +8,16 @@ __license__ = "GPL v3"
 import datetime
 import json
 import re
-import urllib2
-import urlparse
+
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+    from urllib.parse import urlparse
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+    import urlparse
+
 
 from PyQt5.Qt import QAbstractTableModel, QCoreApplication, Qt
 
